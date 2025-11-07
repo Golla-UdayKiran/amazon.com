@@ -28,4 +28,4 @@
 
 <p><a href="https://supersimple.dev/projects/amazon">Amazon Project</a></p>
 
-<code>website</code>: https://amazondotcom.vercel.app
+<code>website</code>: https://amazondotcommercial.vercel.app

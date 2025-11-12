@@ -1,3 +1,10 @@
+// Optional: notice we can write imports on multiple
+// lines so the line doesn't get too long.
+import {addToCart,
+  calculateCartQuantity} from '../data/cart.js';
+import {products} from '../data/products.js';
+import {formatCurrency} from './utils/money.js';
+
 let productsHTML = '';
 
 products.forEach((product) => {
@@ -21,7 +28,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-price">
-        $${(product.priceCents / 100).toFixed(2)}
+        $${formatCurrency(product.priceCents)}
       </div>
 
       <div class="product-quantity-container">
@@ -69,41 +76,21 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 // (2 and 5 are ids that are returned when we call setTimeout).
 const addedMessageTimeouts = {};
 
+function updateCartQuantity() {
+  const cartQuantity = calculateCartQuantity();
+
+  document.querySelector('.js-cart-quantity')
+    .innerHTML = cartQuantity;
+}
+
+updateCartQuantity();
+
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
       const {productId} = button.dataset;
-
-      let matchingItem;
-
-      cart.forEach((item) => {
-        if (productId === item.productId) {
-          matchingItem = item;
-        }
-      });
-
-      const quantitySelector = document.querySelector(
-        `.js-quantity-selector-${productId}`
-      );
-      const quantity = Number(quantitySelector.value);
-
-      if (matchingItem) {
-        matchingItem.quantity += quantity;
-      } else {
-        cart.push({
-          productId,
-          quantity
-        });
-      }   
-      
-      let cartQuantity = 0;
-
-      cart.forEach((item) => {
-        cartQuantity += item.quantity;
-      });
-
-      document.querySelector('.js-cart-quantity')
-        .innerHTML = cartQuantity;
+      addToCart(productId);
+      updateCartQuantity();
       
       const addedMessage = document.querySelector(
       `.js-added-to-cart-${productId}`
